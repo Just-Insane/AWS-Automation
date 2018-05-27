@@ -86,34 +86,37 @@ Need an idea? Here: Fortune-of-the-Day - Display a random fortune each page load
 
 #### Cost Analysis
 
-Explore the AWS pricing models and see how pricing is structured for the services you've used.
-Answer the following for each of the main architectures you built:
-Roughly how much would this have costed for a month?
-How would I scale this architecture and how would my costs change?
-Architectures
-Basic Web Hosting: HA EC2 Instances Serving Static Web Page behind ELB
-Microservices: Elastic Beanstalk SSL Website for only API + S3 Static Website for all static content + DynamoDB Table + Route53 + CloudFront SSL
-Serverless: Serverless Website using API Gateway + Lambda Functions + DynamoDB + Route53 + CloudFront SSL + S3 Static Website for all static content
+* Explore the AWS pricing models and see how pricing is structured for the services you've used.
+* Answer the following for each of the main architectures you built:
+    * Roughly how much would this have costed for a month?
+    * How would I scale this architecture and how would my costs change?
+* Architectures
+    * Basic Web Hosting: HA EC2 Instances Serving Static Web Page behind ELB
+    * Microservices: Elastic Beanstalk SSL Website for only API + S3 Static Website for all static content + DynamoDB Table + Route53 + CloudFront SSL
+    * Serverless: Serverless Website using API Gateway + Lambda Functions + DynamoDB + Route53 + CloudFront SSL + S3 Static Website for all static content
 
-### Automation
+#### Automation
 
-!!! This is REALLY important !!!
+**!!! This is REALLY important !!!**
 
-These technologies are the most powerful when they're automated. You can make a Development environment in minutes and experiment and throw it away without a thought. This stuff isn't easy, but it's where the really skilled people excel.
-Automate the deployment of the architectures above. Use whatever tool you want. The popular ones are AWS CloudFormation or Teraform. Store your code in AWS CodeCommit or on GitHub. Yes, you can automate the deployment of ALL of the above with native AWS tools.
-I suggest when you get each app-related section of the done by hand you go back and automate the provisioning of the infrastructure. For example, automate the provisioning of your EC2 instance. Automate the creation of your S3 Bucket with Static Website Hosting enabled, etc. This is not easy, but it is very rewarding when you see it work.
-Continuous Delivery
+* These technologies are the most powerful when they're automated. You can make a Development environment in minutes and experiment and throw it away without a thought. This stuff isn't easy, but it's where the really skilled people excel.
+* Automate the deployment of the architectures above. Use whatever tool you want. The popular ones are AWS CloudFormation or Teraform. Store your code in AWS CodeCommit or on GitHub. Yes, you can automate the deployment of ALL of the above with native AWS tools.
+* I suggest when you get each app-related section of the done by hand you go back and automate the provisioning of the infrastructure. For example, automate the provisioning of your EC2 instance. Automate the creation of your S3 Bucket with Static Website Hosting enabled, etc. This is not easy, but it is very rewarding when you see it work.
 
-As you become more familiar with Automating deployments you should explore and implement a Continuous Delivery pipeline.
-Develop a CI/CD pipeline to automatically update a dev deployment of your infrastructure when new code is published, and then build a workflow to update the production version if approved. Travis CI is a decent SaaS tool, Jenkins has a huge following too, if you want to stick with AWS-specific technologies you'll be looking at CodePipeline.
-Miscellaneous / Bonus
+#### Continuous Delivery
+
+* As you become more familiar with Automating deployments you should explore and implement a Continuous Delivery pipeline.
+* Develop a CI/CD pipeline to automatically update a dev deployment of your infrastructure when new code is published, and then build a workflow to update the production version if approved. Travis CI is a decent SaaS tool, Jenkins has a huge following too, if you want to stick with AWS-specific technologies you'll be looking at CodePipeline.
+
+#### Miscellaneous / Bonus
 
 These didn't fit in nicely anywhere but are important AWS topics you should also explore:
 
-IAM: You should really learn how to create complex IAM Policies. You would have had to do basic roles+policies for for the EC2 Instance Role and Lambda Execution Role, but there are many advanced features.
-Networking: Create a new VPC from scratch with multiple subnets (you'll learn a LOT of networking concepts), once that is working create another VPC and peer them together. Get a VM in each subnet to talk to eachother using only their private IP addresses.
-KMS: Go back and redo the early EC2 instance goals but enable encryption on the disk volumes. Learn how to encrypt an AMI.
-Final Thoughts
+* IAM: You should really learn how to create complex IAM Policies. You would have had to do basic roles+policies for for the EC2 Instance Role and Lambda Execution Role, but there are many advanced features.
+* Networking: Create a new VPC from scratch with multiple subnets (you'll learn a LOT of networking concepts), once that is working create another VPC and peer them together. Get a VM in each subnet to talk to eachother using only their private IP addresses.
+* KMS: Go back and redo the early EC2 instance goals but enable encryption on the disk volumes. Learn how to encrypt an AMI.
+
+### Final Thoughts
 
 I've been recently recruiting for Cloud Systems Engineers and Cloud Systems Administrators. We've interviewed over a dozen local people with relevant resume experience. Every single person we interviewed would probably struggle starting with the DynamoDB/AutoScaling work. I'm finding there are very few people that HAVE ACTUALLY DONE THIS STUFF. Many people are familiar with the concepts, but when pushed for details they don't have answers or admit to just peripheral knowledge. You learn SO MUCH by doing.
 
