@@ -1,0 +1,64 @@
+- name: Get Facts
+  ec2_instance_facts:
+    filters:
+      "tag:Name": webserver
+      "instance-state-name": running
+  register: ec2facts
+
+- name: Snapshot Instance
+  ec2_snapshot:
+    instance_id: "{{ item.instance_id }}"
+    device_name: /dev/xvda
+    region: "{{ region }}"
+    description: Snapshot of created webserver
+    snapshot_tags:
+      Name: webserver
+      Software: nginx
+  with_items: "{{ ec2facts.instances }}"
+
+- name: Get Snapshot facts
+  ec2_snapshot_facts:
+    filters:
+      "tag:Name": webserver
+      "tag:Software": nginx
+  register: snapshot
+
+- name: Terminate instances after snapshot
+  ec2:
+    state: 'absent'
+    region: "{{ region }}"
+    instance_id: "{{ item.instance_id }}"
+  with_items: "{{ ec2facts.instances }}"
+
+- name: Create AMI Registration
+  ec2_ami:
+    name: webserver AMI
+    state: present
+    architecture: x86_64
+    virtualization_type: hvm
+    root_device_name: /dev/xvda
+    device_mapping:
+      - device_name: /dev/xvda
+        size: 8
+        snapshot_id: "{{ item.snapshot_id }}"
+        delete_on_termination: true
+        volume_type: gp2
+  with_items: "{{ snapshot.snapshots }}"
+  register: image
+
+- name: Create EC2 instance from image
+  ec2:
+    key_name: "{{ key_name }}"
+    instance_type: "{{ instance_type }}"
+    image: "{{ item.image_id }}"
+    wait: true
+    group: "{{ security_group }}"
+    count: 1
+    vpc_subnet_id: "{{ subnet }}"
+    assign_public_ip: yes
+    region: "{{ region }}"
+    instance_tags: 
+      Name: webserver
+      Software: nginx
+  with_items: "{{ image.results }}"
+  register: ec2instance

@@ -1,0 +1,6 @@
+key_name: Justin-YubiKey
+instance_type: t2.micro
+security_group: webserver
+subnet: subnet-06dd7a6e
+image: ami-338a0a57
+region: ca-central-1

@@ -38,7 +38,6 @@
   service:
     name: nginx
     state: restarted
-    enabled: yes
   become: yes
 
 - name: Copy a index.html
