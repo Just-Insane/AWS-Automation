@@ -97,7 +97,7 @@ Need an idea? Here: Fortune-of-the-Day - Display a random fortune each page load
 
 #### Automation
 
-**!!! This is REALLY important !!!**
+**_!!! This is REALLY important !!!_**
 
 * These technologies are the most powerful when they're automated. You can make a Development environment in minutes and experiment and throw it away without a thought. This stuff isn't easy, but it's where the really skilled people excel.
 * Automate the deployment of the architectures above. Use whatever tool you want. The popular ones are AWS CloudFormation or Teraform. Store your code in AWS CodeCommit or on GitHub. Yes, you can automate the deployment of ALL of the above with native AWS tools.
