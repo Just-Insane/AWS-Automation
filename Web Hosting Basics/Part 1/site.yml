@@ -1,0 +1,5 @@
+- hosts: localhost
+  user: justin
+
+- import_playbook: common.yml
+- import_playbook: webserver.yml

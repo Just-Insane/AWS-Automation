@@ -1,0 +1,4 @@
+- hosts: launched
+  user: ec2-user
+  roles:
+    - webserver

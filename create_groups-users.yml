@@ -1,0 +1,26 @@
+- hosts: localhost
+  connection: local
+  gather_facts: False
+
+  tasks:
+
+    - name: Create a new Group
+      iam:
+        iam_type: group
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - testgroup
+      register: new_groups
+
+    - name: Create two new IAM users with API keys
+      iam:
+        iam_type: user
+        name: "{{ item }}"
+        state: present
+        password: "TempP@ssw0rd008"
+        access_key_state: create
+        groups: testgroup
+      with_items:
+        - jcleese
+        - mpython
