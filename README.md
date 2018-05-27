@@ -3,26 +3,28 @@
 ## Information:
 Automating AWS deployment of guide: https://www.reddit.com/r/sysadmin/comments/8inzn5/so_you_want_to_learn_aws_aka_how_do_i_learn_to_be/
 
-Introduction
+### Introduction
 
 So many people struggle with where to get started with AWS and cloud technologies in general. There is popular "How do I learn to be a Linux admin?" post that inspired me to write an equivalent for cloud technologies. This post serves as a guide of goals to grow from basic AWS knowledge to understanding and deploying complex architectures in an automated way. Feel free to pick up where you feel relevant based on prior experience.
 
-Assumptions:
+### Assumptions:
 
-You have basic-to-moderate Linux systems administration skills
-You are at least familiar with programming/scripting. You don't need to be a whiz but you should have some decent hands-on experience automating and programming.
-You are willing to dedicate the time to overcome complex issues.
-You have an AWS Account and a marginal amount of money to spend improving your skills.
-How to use this guide:
+* You have basic-to-moderate Linux systems administration skills
+* You are at least familiar with programming/scripting. You don't need to be a whiz but you should have some decent hands-on experience automating and programming.
+* You are willing to dedicate the time to overcome complex issues.
+* You have an AWS Account and a marginal amount of money to spend improving your skills.
+
+### How to use this guide:
 
 This is not a step by step how-to guide.
-You should take each goal and "figure it out". I have hints to guide you in the right direction.
-Google is your friend. AWS Documentation is your friend. Stack Overflow is your friend.
-Find out and implement the "right way", not the quick way. Ok, maybe do the quick way first then refactor to the right way before moving on.
-Shut down or de-provision as much as you can between learning sessions. You should be able to do everything in this guide for literally less than $50 using the AWS Free Tier. Rebuilding often will reinforce concepts anyway.
-Skip ahead and read the Cost Analysis and Automation sections and have them in the back of your mind as you work through the goals.
-Lastly, just get hands on, no better time to start then NOW.
-Project Overview
+* You should take each goal and "figure it out". I have hints to guide you in the right direction.
+* Google is your friend. AWS Documentation is your friend. Stack Overflow is your friend.
+* Find out and implement the "right way", not the quick way. Ok, maybe do the quick way first then refactor to the right way before moving on.
+* Shut down or de-provision as much as you can between learning sessions. You should be able to do everything in this guide for literally less than $50 using the AWS Free Tier. Rebuilding often will reinforce concepts anyway.
+* Skip ahead and read the Cost Analysis and Automation sections and have them in the back of your mind as you work through the goals.
+* Lastly, just get hands on, no better time to start then NOW.
+
+### Project Overview
 
 This is NOT a guide on how to develop websites on AWS. This uses a website as an excuse to use all the technologies AWS puts at your fingertips. The concepts you will learn going through these exercises apply all over AWS.
 
@@ -30,24 +32,27 @@ This guide takes you through a maturity process from the most basic webpage to a
 
 Need an idea? Here: Fortune-of-the-Day - Display a random fortune each page load, have a box at the bottom and a submit button to add a new fortune to the random fortune list.
 
-Account Basics
+#### Account Basics
 
-Create an IAM user for your personal use.
-Set up MFA for your root user, turn off all root user API keys.
-Set up Billing Alerts for anything over a few dollars.
-Configure the AWS CLI for your user using API credentials.
-Checkpoint: You can use the AWS CLI to interrogate information about your AWS account.
-Web Hosting Basics
+* Create an IAM user for your personal use.
+* Set up MFA for your root user, turn off all root user API keys.
+* Set up Billing Alerts for anything over a few dollars.
+* Configure the AWS CLI for your user using API credentials.
+* Checkpoint: You can use the AWS CLI to interrogate information about your AWS account.
 
-Deploy a EC2 VM and host a simple static "Fortune-of-the-Day Coming Soon" web page.
-Take a snapshot of your VM, delete the VM, and deploy a new one from the snapshot. Basically disk backup + disk restore.
-Checkpoint: You can view a simple HTML page served from your EC2 instance.
-Auto Scaling
+#### Web Hosting Basics
 
-Create an AMI from that VM and put it in an autoscaling group so one VM always exists.
-Put a Elastic Load Balancer infront of that VM and load balance between two Availability Zones (one EC2 in each AZ).
-Checkpoint: You can view a simple HTML page served from both of your EC2 instances. You can turn one off and your website is still accessible.
-External Data
+* Deploy a EC2 VM and host a simple static "Fortune-of-the-Day Coming Soon" web page.
+* Take a snapshot of your VM, delete the VM, and deploy a new one from the snapshot. Basically disk backup + disk restore.
+* Checkpoint: You can view a simple HTML page served from your EC2 instance.
+
+#### Auto Scaling
+
+* Create an AMI from that VM and put it in an autoscaling group so one VM always exists.
+* Put a Elastic Load Balancer infront of that VM and load balance between two Availability Zones (one EC2 in each AZ).
+* Checkpoint: You can view a simple HTML page served from both of your EC2 instances. You can turn one off and your website is still accessible.
+
+#### External Data
 
 Create a DynamoDB table and experiment with loading and retrieving data manually, then do the same via a script on your local machine.
 Refactor your static page into your Fortune-of-the-Day website (Node, PHP, Python, whatever) which reads/updates a list of fortunes in the AWS DynamoDB table. (Hint: EC2 Instance Role)
