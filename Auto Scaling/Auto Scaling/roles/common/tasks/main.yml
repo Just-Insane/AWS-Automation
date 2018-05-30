@@ -32,7 +32,7 @@
 
 - name: Create AMI Registration
   ec2_ami:
-    name: webserver AMI
+    name: autoscaling-AMI
     state: present
     architecture: x86_64
     virtualization_type: hvm
@@ -46,19 +46,44 @@
   with_items: "{{ snapshot.snapshots }}"
   register: image
 
-- name: Create EC2 instance from image
-  ec2:
-    key_name: "{{ key_name }}"
-    instance_type: "{{ instance_type }}"
-    image: "{{ item.image_id }}"
-    wait: true
-    group: "{{ security_group }}"
-    count: 1
-    vpc_subnet_id: "{{ subnet }}"
-    assign_public_ip: yes
+- local_action:
+    module: ec2_elb_lb
+    name: "autoscalling-lb"
+    state: present
     region: "{{ region }}"
-    instance_tags: 
-      Name: webserver
-      Software: nginx
+    zones:
+      - ca-central-1a
+      - ca-central-1b
+    listeners:
+      - protocol: http # options are http, https, ssl, tcp
+        load_balancer_port: 80
+        instance_port: 80
+
+- name: create launch config
+  ec2_lc:
+    name: autoscaling-lc
+    image_id: "{{ item.image_id }}"
+    key_name: "{{ key_name }}"
+    region: "{{ region }}"
+    security_groups: "{{ security_group }}"
+    instance_type: "{{ instance_type }}"
+    assign_public_ip: yes
   with_items: "{{ image.results }}"
-  register: ec2instance
+
+- ec2_vpc_subnet_facts:
+  register: subnet_facts
+
+- ec2_asg:
+    name: autoscaling-asg
+    launch_config_name: autoscaling-lc
+    load_balancers: [ 'autoscalling-lb' ]
+    health_check_period: 60
+    health_check_type: ELB
+    replace_all_instances: yes
+    min_size: 2
+    max_size: 2
+    desired_capacity: 2
+    region: "{{ region }}"
+    vpc_zone_identifier: [ "{{ subnet_facts.subnets[0].id }}", "{{ subnet_facts.subnets[1].id }}" ]
+    tags:
+      - environment: production
