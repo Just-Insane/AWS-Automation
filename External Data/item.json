@@ -1,0 +1,4 @@
+{
+    "FortuneID": {"S": "fortune0001"},
+    "Fortune": {"S": "It will be cold tomorrow"}
+}

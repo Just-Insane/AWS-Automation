@@ -1,0 +1,28 @@
+{
+    "FortuneList": [
+        {
+            "PutRequest": {
+                "Item": {
+                    "FortuneID": {"S": "fortune0002"},
+                    "Fortune": {"S": "It will rain tomorrow."}
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "FortuneID": {"S": "fortune0003"},
+                    "Fortune": {"S": "It will be a great day!"}
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "FortuneID": {"S": "fortune0004"},
+                    "Fortune": {"S": "It will snow tomorrow"}
+                }
+            }
+        }
+    ]
+}
