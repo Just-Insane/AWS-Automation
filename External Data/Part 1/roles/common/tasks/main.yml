@@ -1,0 +1,8 @@
+- name: Create Fortune-of-the-day DynamoDB Table
+  dynamodb_table:
+    name: FortuneList
+    region: "{{ region }}"
+    hash_key_name: FortuneID
+    hash_key_type: STRING
+    read_capacity: 2
+    write_capacity: 2
