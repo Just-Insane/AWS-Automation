@@ -34,15 +34,18 @@
     jump: ACCEPT
   become: yes
 
-- name: Copy a index.html
-  copy:
-    src: index.html
+- name: Pull git repo
+  git:
+    repo: 'https://github.com/Just-Insane/FortuneSite.git'
     dest: /usr/share/nginx/html/
+    version: master
+
+- name: Set file permissions
+  file:
+    path: /usr/share/nginx/html
     owner: nginx
     group: nginx
     mode: 0664
-    backup: yes
-  become: yes
 
 - name: Start service nginx, if not running
   service:
