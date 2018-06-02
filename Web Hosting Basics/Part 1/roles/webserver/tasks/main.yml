@@ -51,13 +51,20 @@
     version: master
   become: yes
 
-- name: Set file permissions
+- name: Set path permissions
   file:
     path: /usr/share/nginx/html
     owner: nginx
-    recurse: yes
     group: nginx
-    mode: 0664
+    mode: 0755
+  become: yes
+
+- name: Set file permissions
+  file:
+    path: /usr/share/nginx/html/*.*
+    owner: nginx
+    group: nginx
+    mode: 0644
   become: yes
 
 - name: Start service nginx, if not running
