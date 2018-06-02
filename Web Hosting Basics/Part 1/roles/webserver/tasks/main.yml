@@ -6,6 +6,10 @@
   yum: name=nginx state=latest
   become: yes
 
+- name: Install git
+  yum: name=git state=latest
+  become: yes
+
 - name: Allow web traffic 80
   iptables:
     chain: INPUT
