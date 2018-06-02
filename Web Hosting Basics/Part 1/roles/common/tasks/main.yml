@@ -14,6 +14,10 @@
       Software: nginx
   register: ec2
 
+- name: Attach instance role
+  shell: "aws ec2 associate-iam-instance-profile --instance-id {{ item.id }} --iam-instance-profile Name=DynamoDB-Admin"
+  with_items: "{{ ec2.instances }}"
+
 - name: Add new instance to host group
   add_host:
     hostname: "{{ item.public_ip }}"
