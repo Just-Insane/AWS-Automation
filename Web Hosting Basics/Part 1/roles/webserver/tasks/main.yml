@@ -38,6 +38,13 @@
     jump: ACCEPT
   become: yes
 
+- name: Remove default nginx files
+  file:
+    state: absent
+    path: /usr/share/nginx/html/
+    recurse: yes
+  become: yes
+
 - name: Pull git repo
   git:
     repo: 'https://github.com/Just-Insane/FortuneSite.git'
