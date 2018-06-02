@@ -44,8 +44,10 @@
   file:
     path: /usr/share/nginx/html
     owner: nginx
+    recurse: yes
     group: nginx
     mode: 0664
+  become: yes
 
 - name: Start service nginx, if not running
   service:
