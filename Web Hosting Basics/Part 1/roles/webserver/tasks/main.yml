@@ -42,7 +42,6 @@
   file:
     state: absent
     path: /usr/share/nginx/html/
-    recurse: yes
   become: yes
 
 - name: Pull git repo
