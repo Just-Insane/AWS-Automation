@@ -48,7 +48,8 @@
   git:
     repo: 'https://github.com/Just-Insane/FortuneSite.git'
     dest: /usr/share/nginx/html/
-    version: master
+    version: 
+  become: yes
 
 - name: Set file permissions
   file:
