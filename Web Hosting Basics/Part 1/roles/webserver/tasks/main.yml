@@ -10,6 +10,14 @@
   yum: name=git state=latest
   become: yes
 
+- name: Install node
+  yum: name=node state=latest
+  become: yes
+
+- name: Install npm
+  yum: name=npm state=latest
+  become: yes
+
 - name: Allow web traffic 80
   iptables:
     chain: INPUT
