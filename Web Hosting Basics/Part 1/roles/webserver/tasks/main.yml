@@ -2,45 +2,39 @@
   yum: name=* state=latest
   become: yes
 
-- name: Install nginx
-  yum: name=nginx state=latest
+- name: Setup nginx repo
+  yum_repository:
+    name: nginx
+    description: NGINX Repo
+    baseurl: http://nginx.org/packages/rhel/7/$basearch/
+    gpgcheck: no
+    enabled: yes
   become: yes
 
-- name: Install git
-  yum: name=git state=latest
+- name: Install packages
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - nginx
+    - git
+  become: yes
+
+- name: Get Node.JS
+  shell: curl --silent --location https://rpm.nodesource.com/setup_10.x | sudo bash -
+
+- name: Install Node.JS
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - nodejs
+    - gcc-c++
+    - make
   become: yes
 
 - name: Curl credentials
   shell: curl http://169.254.169.254/latest/meta-data/iam/security-credentials/DynamoDB-Admin
-  warn: False
-
-- name: Allow web traffic 80
-  iptables:
-    chain: INPUT
-    protocol: tcp
-    destination_port: 80
-    ctstate: NEW
-    jump: ACCEPT
-    comment: Accept new port 80 connections.
-  become: yes
-
-- name: Allow new ssh connections
-  iptables:
-    chain: INPUT
-    protocol: tcp
-    destination_port: 22
-    ctstate: NEW
-    syn: match
-    jump: ACCEPT
-    comment: Accept new SSH connections.
-  become: yes
-
-- name: Allow related and established connections
-  iptables:
-    chain: INPUT
-    ctstate: ESTABLISHED,RELATED
-    jump: ACCEPT
-  become: yes
 
 # - name: Remove default nginx files
 #   file:
@@ -53,6 +47,25 @@
     repo: 'https://github.com/Just-Insane/FortuneSite.git'
     dest: /home/ec2-user/FortuneSite/
     version: master
+
+- name: Setup FortuneSite Service
+  file:
+    src: fortunesite.service
+    dest: /etc/systemd/system
+    owner: root
+    group: root
+    mode: 0755
+  become: yes
+
+- name: Install dependancies
+  shell: cd /home/ec2-user/FortuneSite/ && npm install
+
+- name: Start FortuneSite Service
+  service:
+    name: FortuneSite
+    state: restarted
+    enabled: yes
+  become: yes
 
 # - name: Set path permissions
 #   file:
