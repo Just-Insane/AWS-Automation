@@ -77,7 +77,8 @@
   become: yes
 
 - name: set SElinux
-  shell: cat /var/log/audit/audit.log | audit2allow -a -M policy && semodule -i policy.pp && rm policy.pp
+  shell: cd /tmp && cat /var/log/audit/audit.log | audit2allow -a -M policy && semodule -i policy.pp && rm policy.pp
+  become: yes
 
 - name: Start service nginx, if not running
   service:
