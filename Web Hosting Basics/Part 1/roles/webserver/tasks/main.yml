@@ -45,7 +45,10 @@
 - name: make server.js executable
   file:
     path: /home/ec2-user/FortuneSite/server.js
+    owner: ec2-user
+    group: ec2-user
     mode: 0775
+  become: yes
 
 - name: Setup FortuneSite Service
   copy:
@@ -53,18 +56,11 @@
     dest: /etc/systemd/system
     owner: root
     group: root
-    mode: 0755
+    mode: 0644
   become: yes
 
 - name: Install dependancies
   shell: cd /home/ec2-user/FortuneSite/ && npm install
-
-- name: Start FortuneSite Service
-  service:
-    name: fortunesite
-    state: restarted
-    enabled: yes
-  become: yes
 
 - name: Copy nginx conf file
   copy:
@@ -76,8 +72,40 @@
     backup: yes
   become: yes
 
-- name: set SElinux
-  shell: cd /tmp && cat /var/log/audit/audit.log | audit2allow -a -M policy && semodule -i policy.pp && rm policy.pp
+- name: create fortunesite user
+  user:
+    name: fortunesite
+    state: present
+    system: yes
+    shell: /bin/false
+    createhome: no
+
+- name: set SElinux permissive
+  shell: setenforce 0
+  become: yes
+
+- name: Start FortuneSite Service
+  service:
+    name: fortunesite
+    state: restarted
+    enabled: yes
+  become: yes
+
+- name: Start service nginx, if not running
+  service:
+    name: nginx
+    state: restarted
+    enabled: yes
+  become: yes
+
+- name: Set SElinux policy
+  shell: cd /tmp && cat /var/log/audit/audit.log | audit2allow -a -M policy && semodule -i policy.pp && rm -f policy.* && setenforce 1
+
+- name: Start FortuneSite Service
+  service:
+    name: fortunesite
+    state: restarted
+    enabled: yes
   become: yes
 
 - name: Start service nginx, if not running
