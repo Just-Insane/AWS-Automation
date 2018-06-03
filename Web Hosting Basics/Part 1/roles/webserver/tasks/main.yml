@@ -72,15 +72,6 @@
     backup: yes
   become: yes
 
-- name: create fortunesite user
-  user:
-    name: fortunesite
-    state: present
-    system: yes
-    shell: /bin/false
-    createhome: no
-  become: yes
-
 - name: set SElinux permissive
   shell: setenforce 0
   become: yes
@@ -98,6 +89,8 @@
     state: restarted
     enabled: yes
   become: yes
+
+- shell: curl http://localhost
 
 - name: Set SElinux policy
   shell: cd /tmp && cat /var/log/audit/audit.log | audit2allow -a -M policy && semodule -i policy.pp && rm -f policy.* && setenforce 1
