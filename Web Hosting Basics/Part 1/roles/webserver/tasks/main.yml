@@ -36,17 +36,16 @@
 - name: Curl credentials
   shell: curl http://169.254.169.254/latest/meta-data/iam/security-credentials/DynamoDB-Admin
 
-# - name: Remove default nginx files
-#   file:
-#     state: absent
-#     path: /usr/share/nginx/html/
-#   become: yes
-
 - name: Pull git repo
   git:
     repo: 'https://github.com/Just-Insane/FortuneSite.git'
     dest: /home/ec2-user/FortuneSite/
     version: master
+
+- name: make server.js executable
+  file:
+    path: /home/ec2-user/FortuneSite/server.js
+    mode: 0775
 
 - name: Setup FortuneSite Service
   copy:
@@ -62,18 +61,10 @@
 
 - name: Start FortuneSite Service
   service:
-    name: FortuneSite
+    name: fortunesite
     state: restarted
     enabled: yes
   become: yes
-
-# - name: Set path permissions
-#   file:
-#     path: /usr/share/nginx/html
-#     owner: nginx
-#     group: nginx
-#     mode: 0755
-#   become: yes
 
 - name: Copy nginx conf file
   copy:
@@ -84,6 +75,9 @@
     mode: 0644
     backup: yes
   become: yes
+
+- name: set SElinux
+  shell: cat /var/log/audit/audit.log | audit2allow -a -M policy && semodule -i policy.pp && rm policy.pp
 
 - name: Start service nginx, if not running
   service:
