@@ -75,6 +75,7 @@
 - selinux:
     policy: targeted
     state: permissive
+  become: yes
 
 - name: Start FortuneSite Service
   service:
