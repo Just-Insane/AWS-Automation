@@ -8,7 +8,7 @@
 - name: Snapshot Instance
   ec2_snapshot:
     instance_id: "{{ item.instance_id }}"
-    device_name: /dev/xvda
+    device_name: /dev/sda1
     region: "{{ region }}"
     description: Snapshot of created webserver
     snapshot_tags:
@@ -36,10 +36,10 @@
     state: present
     architecture: x86_64
     virtualization_type: hvm
-    root_device_name: /dev/xvda
+    root_device_name: /dev/sda1
     device_mapping:
-      - device_name: /dev/xvda
-        size: 8
+      - device_name: /dev/sda1
+        size: 10
         snapshot_id: "{{ item.snapshot_id }}"
         delete_on_termination: true
         volume_type: gp2

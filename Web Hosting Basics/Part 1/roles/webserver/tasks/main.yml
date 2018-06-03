@@ -72,19 +72,42 @@
     backup: yes
   become: yes
 
-- selinux:
+- name: Set selinux policy
+  selinux:
     policy: targeted
     state: permissive
   become: yes
 
-- name: Start FortuneSite Service
+- service:
+    name: fortunesite
+    state: restarted
+    enabled: yes
+  become: yes
+
+- service:
+    name: nginx
+    state: restarted
+    enabled: yes
+  become: yes
+
+- shell: "curl {{ ansible_eth0.ipv4.address }} && sleep 10 && curl {{ ansible_eth0.ipv4.address }}"
+
+- shell: cd /tmp && cat /var/log/audit/audit.log | audit2allow -a -M policy && semodule -i policy.pp && rm -f policy.*
+  become: yes
+
+- selinux:
+    policy: targeted
+    state: enforcing
+  become: yes
+
+- name: Restart FortuneSite Service
   service:
     name: fortunesite
     state: restarted
     enabled: yes
   become: yes
 
-- name: Start service nginx, if not running
+- name: Restart service nginx, if not running
   service:
     name: nginx
     state: restarted
