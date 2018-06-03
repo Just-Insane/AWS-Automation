@@ -72,28 +72,9 @@
     backup: yes
   become: yes
 
-- name: set SElinux permissive
-  shell: setenforce 0
-  become: yes
-
-- name: Start FortuneSite Service
-  service:
-    name: fortunesite
-    state: restarted
-    enabled: yes
-  become: yes
-
-- name: Start service nginx, if not running
-  service:
-    name: nginx
-    state: restarted
-    enabled: yes
-  become: yes
-
-- shell: curl http://localhost
-
-- name: Set SElinux policy
-  shell: cd /tmp && cat /var/log/audit/audit.log | audit2allow -a -M policy && semodule -i policy.pp && rm -f policy.* && setenforce 1
+- selinux:
+    policy: targeted
+    state: permissive
 
 - name: Start FortuneSite Service
   service:
