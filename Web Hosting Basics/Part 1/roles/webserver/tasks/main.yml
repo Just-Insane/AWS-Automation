@@ -79,6 +79,7 @@
     system: yes
     shell: /bin/false
     createhome: no
+  become: yes
 
 - name: set SElinux permissive
   shell: setenforce 0
