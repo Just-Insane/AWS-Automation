@@ -8,7 +8,7 @@
 - name: Snapshot Instance
   ec2_snapshot:
     instance_id: "{{ item.instance_id }}"
-    device_name: /dev/xvda
+    device_name: /dev/sda1
     region: "{{ region }}"
     description: Snapshot of created webserver
     snapshot_tags:
@@ -36,10 +36,10 @@
     state: present
     architecture: x86_64
     virtualization_type: hvm
-    root_device_name: /dev/xvda
+    root_device_name: /dev/sda1
     device_mapping:
-      - device_name: /dev/xvda
-        size: 8
+      - device_name: /dev/sda1
+        size: 10
         snapshot_id: "{{ item.snapshot_id }}"
         delete_on_termination: true
         volume_type: gp2
@@ -55,7 +55,7 @@
       - ca-central-1a
       - ca-central-1b
     listeners:
-      - protocol: http # options are http, https, ssl, tcp
+      - protocol: http
         load_balancer_port: 80
         instance_port: 80
 
@@ -68,6 +68,7 @@
     security_groups: "{{ security_group }}"
     instance_type: "{{ instance_type }}"
     assign_public_ip: yes
+    instance_profile_name: arn:aws:iam::388750927632:instance-profile/DynamoDB-Admin
   with_items: "{{ image.results }}"
 
 - ec2_vpc_subnet_facts:
@@ -85,5 +86,6 @@
     desired_capacity: 2
     region: "{{ region }}"
     vpc_zone_identifier: [ "{{ subnet_facts.subnets[0].id }}", "{{ subnet_facts.subnets[1].id }}" ]
+    wait_timeout: 1500
     tags:
       - environment: production
